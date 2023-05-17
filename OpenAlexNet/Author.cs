@@ -10,6 +10,10 @@ public class Author
     [JsonPropertyName("id")]
     public string Id { get; set; }
 
+    /// <summary>
+    /// Gets or sets the ORCID ID for this author. 
+    /// </summary>
+    /// <remarks>ORCID is a global and unique ID for authors. This is the Canonical external ID for authors.</remarks>
     [JsonPropertyName("orcid")]
     public string Orcid { get; set; }
 
@@ -23,11 +27,14 @@ public class Author
     /// Gets or sets other ways that we've found this author's name displayed.
     /// </summary>
     [JsonPropertyName("display_name_alternatives")]
-    public List<object> DisplayNameAlternatives { get; set; }
+    public List<string> DisplayNameAlternatives { get; set; }
 
     [JsonPropertyName("relevance_score")]
     public double? RelevanceScore { get; set; }
 
+    /// <summary>
+    /// Gets or sets the number of  Works this this author has created.
+    /// </summary>
     [JsonPropertyName("works_count")]
     public int? WorksCount { get; set; }
 
@@ -37,6 +44,9 @@ public class Author
     [JsonPropertyName("cited_by_count")]
     public int? CitedByCount { get; set; }
 
+    /// <summary>
+    /// Gets or sets citation metrics for this author.
+    /// </summary>
     [JsonPropertyName("summary_stats")]
     public SummaryStats SummaryStats { get; set; }
 
@@ -55,6 +65,9 @@ public class Author
     [JsonPropertyName("last_known_institution")]
     public DehydratedInstitution LastKnownInstitution { get; set; }
 
+    /// <summary>
+    /// Gets or sets the concepts most frequently applied to works created by this author.
+    /// </summary>
     [JsonPropertyName("x_concepts")]
     public List<AuthorConcept> XConcepts { get; set; }
 
@@ -68,9 +81,16 @@ public class Author
     [JsonPropertyName("counts_by_year")]
     public List<AuthorWorkCountsByYear> CountsByYear { get; set; }
 
+    /// <summary>
+    /// Gets or sets a URL that will get you a list of all this author's works.
+    /// </summary>
     [JsonPropertyName("works_api_url")]
     public string WorksApiUrl { get; set; }
 
+    /// <summary>
+    /// Gets or sets the last time anything in this author object changed, expressed as an ISO 8601 date string.
+    /// </summary>
+    /// <remarks>This date is updated for any change at all, including increases in various counts.</remarks>
     [JsonPropertyName("updated_date")]
     public DateTime? UpdatedDate { get; set; }
 
