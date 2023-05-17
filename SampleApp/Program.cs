@@ -13,6 +13,23 @@ HashSet<string> othersAffiliations = new();
 foreach (Author author in root.Results)
 {
     PrintAuthor(author);
+    await PrintAuthorWorksAsync(author);
+}
+
+Console.WriteLine("========= affiliations ===============");
+foreach (var author in affiliations)
+{
+    Console.WriteLine(author);
+}
+
+Console.WriteLine("========= othersAffiliations ===============");
+foreach (var author in othersAffiliations)
+{
+    Console.WriteLine(author);
+}
+
+async Task PrintAuthorWorksAsync(Author author)
+{
     var authorWorks = await api.FindWorksByAuthorAsync(author.Id);
     foreach (Work work in authorWorks.Results)
     {
@@ -47,18 +64,6 @@ foreach (Author author in root.Results)
     }
 }
 
-Console.WriteLine("========= affiliations ===============");
-foreach (var author in affiliations)
-{
-    Console.WriteLine(author);
-}
-
-Console.WriteLine("========= othersAffiliations ===============");
-foreach (var author in othersAffiliations)
-{
-    Console.WriteLine(author);
-}
-
 static void PrintAuthor(Author author)
 {
     Console.WriteLine($"{author.DisplayName} - {author.Id} - {author.Orcid} {author.LastKnownInstitution?.DisplayName}({author.LastKnownInstitution?.Id}) {author.WorksApiUrl}({author.WorksCount})");
@@ -66,5 +71,10 @@ static void PrintAuthor(Author author)
 
 static void PrintWork(Work work)
 {
+    if (work.CorrespondingInstitutionIds.Contains("https://openalex.org/I2800895607"))
+    {
+        Debugger.Break();
+    }
+
     Console.WriteLine($"{work.DisplayName} - {work.Id} - {work.Doi} {string.Join(", ", work.Authorships.Select(_ => $"{_.Author.DisplayName} ({_.RawAffiliationString})"))}");
 }
