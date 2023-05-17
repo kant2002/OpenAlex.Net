@@ -1,31 +1,55 @@
 ﻿using OpenAlexNet;
 using System.Diagnostics;
+using System.Net;
 
 var httpClient = new HttpClient();
 var api = new OpenAlexApi(httpClient);
 //var testAuthor = await api.GetAuthorAsync("A4328046938");
 //PrintAuthor(testAuthor);
-
-var authorName = args.ElementAtOrDefault(0);
-var root = await api.SearchAuthorsAsync(authorName);
 HashSet<string> affiliations = new();
 HashSet<string> othersAffiliations = new();
-foreach (Author author in root.Results)
+
+var authorOrInstitutionName = args.ElementAtOrDefault(0);
+//await FindAuthorWorks(authorOrInstitutionName);
+int page = 1;
+var works = await api.FindWorksByAffiliationAsync(authorOrInstitutionName, page);
+while (works.Meta.PerPage * works.Meta.Page < works.Meta.Count)
 {
-    PrintAuthor(author);
-    await PrintAuthorWorksAsync(author);
+    PrintWorks(works.Results);
+    page++;
+    works = await api.FindWorksByAffiliationAsync(authorOrInstitutionName, page);
 }
 
-Console.WriteLine("========= affiliations ===============");
-foreach (var author in affiliations)
+PrintWorks(works.Results);
+
+void PrintWorks(List<Work> works)
 {
-    Console.WriteLine(author);
+    foreach (Work work in works)
+    {
+        PrintWork(work);
+    }
 }
 
-Console.WriteLine("========= othersAffiliations ===============");
-foreach (var author in othersAffiliations)
+async Task FindAuthorWorks(string authorName)
 {
-    Console.WriteLine(author);
+    var root = await api.SearchAuthorsAsync(authorName);
+    foreach (Author author in root.Results)
+    {
+        PrintAuthor(author);
+        await PrintAuthorWorksAsync(author);
+    }
+
+    Console.WriteLine("========= affiliations ===============");
+    foreach (var author in affiliations)
+    {
+        Console.WriteLine(author);
+    }
+
+    Console.WriteLine("========= othersAffiliations ===============");
+    foreach (var author in othersAffiliations)
+    {
+        Console.WriteLine(author);
+    }
 }
 
 async Task PrintAuthorWorksAsync(Author author)

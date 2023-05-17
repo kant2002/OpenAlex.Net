@@ -11,12 +11,12 @@ public class Meta
     public int? DbResponseTimeMs { get; set; }
 
     [JsonPropertyName("page")]
-    public object Page { get; set; }
+    public int? Page { get; set; }
 
     [JsonPropertyName("per_page")]
     public int? PerPage { get; set; }
 
     [JsonPropertyName("next_cursor")]
-    public string NextCursor { get; set; }
+    public string? NextCursor { get; set; }
 }
 

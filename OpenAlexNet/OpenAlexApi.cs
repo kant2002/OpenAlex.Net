@@ -42,11 +42,35 @@ public class OpenAlexApi
         return response;
     }
 
-    public async Task<ResposeInformation<Work>?> FindWorksByAuthorAsync(string author)
+    public async Task<ResposeInformation<Work>?> FindWorksByAuthorAsync(string author, int page = 1)
     {
         var builder = new UriBuilder(new Uri(BaseAddress, "/works"));
         var query = HttpUtility.ParseQueryString("");
         query["filter"] = $"author.id:{author}";
+        if (page > 1)
+        {
+            query["page"] = page.ToString();
+        }
+
+        builder.Query = query.ToString();
+        string url = builder.ToString();
+        using var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+        var responseMessage = await httpClient.SendAsync(requestMessage);
+        responseMessage.EnsureSuccessStatusCode();
+        var response = JsonSerializer.Deserialize<ResposeInformation<Work>>(await responseMessage.Content.ReadAsStreamAsync());
+        return response;
+    }
+
+    public async Task<ResposeInformation<Work>?> FindWorksByAffiliationAsync(string affiliation, int page = 1)
+    {
+        var builder = new UriBuilder(new Uri(BaseAddress, "/works"));
+        var query = HttpUtility.ParseQueryString("");
+        query["filter"] = $"raw_affiliation_string.search:{affiliation}";
+        if (page > 1)
+        {
+            query["page"] = page.ToString();
+        }
+
         builder.Query = query.ToString();
         string url = builder.ToString();
         using var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
