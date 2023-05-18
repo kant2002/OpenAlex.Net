@@ -17,11 +17,26 @@ public class OpenAlexApi
         httpClient.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("OpenAlexApi", "0.0.1"));
     }
 
-    public async Task<ResposeInformation<Author>?> SearchAuthorsAsync(string author, int page = 1, int perPage = 0)
+    public async Task<ResposeInformation<Author>?> SearchAuthorsAsync(string searchString, int page = 1, int perPage = 0)
     {
         var builder = new UriBuilder(new Uri(BaseAddress, "/authors"));
         var query = HttpUtility.ParseQueryString("");
-        query["search"] = author;
+        query["search"] = searchString;
+        ApplyDefaultPaginationParameters(query, page, perPage);
+        builder.Query = query.ToString();
+        string url = builder.ToString();
+        using var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+        var responseMessage = await httpClient.SendAsync(requestMessage);
+        responseMessage.EnsureSuccessStatusCode();
+        var response = JsonSerializer.Deserialize<ResposeInformation<Author>>(await responseMessage.Content.ReadAsStreamAsync());
+        return response;
+    }
+
+    public async Task<ResposeInformation<Author>?> FindAuthorsAsync(AuthorsFilter filter, int page = 1, int perPage = 0)
+    {
+        var builder = new UriBuilder(new Uri(BaseAddress, "/authors"));
+        var query = HttpUtility.ParseQueryString("");
+        query["filter"] = filter.ToString();
         ApplyDefaultPaginationParameters(query, page, perPage);
         builder.Query = query.ToString();
         string url = builder.ToString();
@@ -43,11 +58,11 @@ public class OpenAlexApi
         return response;
     }
 
-    public async Task<ResposeInformation<Work>?> SearchWorksAsync(string author, int page = 1, int perPage = 0)
+    public async Task<ResposeInformation<Work>?> SearchWorksAsync(string searchString, int page = 1, int perPage = 0)
     {
         var builder = new UriBuilder(new Uri(BaseAddress, "/works"));
         var query = HttpUtility.ParseQueryString("");
-        query["search"] = author;
+        query["search"] = searchString;
         ApplyDefaultPaginationParameters(query, page, perPage);
         builder.Query = query.ToString();
         string url = builder.ToString();
