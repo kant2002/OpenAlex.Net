@@ -69,11 +69,11 @@ public class OpenAlexApi
         return response;
     }
 
-    public async Task<ResposeInformation<Work>?> FindWorksByAuthorAsync(string author, int page = 1, int perPage = 0)
+    public async Task<ResposeInformation<Work>?> FindWorksAsync(WorksFilter filter, int page = 1, int perPage = 0)
     {
         var builder = new UriBuilder(new Uri(BaseAddress, "/works"));
         var query = HttpUtility.ParseQueryString("");
-        query["filter"] = $"author.id:{author}";
+        query["filter"] = filter.ToString();
         ApplyDefaultPaginationParameters(query, page, perPage);
         builder.Query = query.ToString();
         string url = builder.ToString();
@@ -84,19 +84,16 @@ public class OpenAlexApi
         return response;
     }
 
+    public async Task<ResposeInformation<Work>?> FindWorksByAuthorAsync(string author, int page = 1, int perPage = 0)
+    {
+        var filter = new WorksFilter().ByAuthorId(author);
+        return await FindWorksAsync(filter, page, perPage);
+    }
+
     public async Task<ResposeInformation<Work>?> FindWorksByAffiliationAsync(string affiliation, int page = 1, int perPage = 0)
     {
-        var builder = new UriBuilder(new Uri(BaseAddress, "/works"));
-        var query = HttpUtility.ParseQueryString("");
-        query["filter"] = $"raw_affiliation_string.search:{affiliation}";
-        ApplyDefaultPaginationParameters(query, page, perPage);
-        builder.Query = query.ToString();
-        string url = builder.ToString();
-        using var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
-        var responseMessage = await httpClient.SendAsync(requestMessage);
-        responseMessage.EnsureSuccessStatusCode();
-        var response = JsonSerializer.Deserialize<ResposeInformation<Work>>(await responseMessage.Content.ReadAsStreamAsync());
-        return response;
+        var filter = new WorksFilter().SearchRawAffiliationString(affiliation);
+        return await FindWorksAsync(filter, page, perPage);
     }
 
     private static void ApplyDefaultPaginationParameters(System.Collections.Specialized.NameValueCollection query, int page, int perPage)
