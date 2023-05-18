@@ -11,6 +11,131 @@ public class WorksFilter
         return FilterBy("author.id", value);
     }
 
+    public WorksFilter ByOrcId(string value)
+    {
+        return FilterBy("author.orcid", value);
+    }
+
+    public WorksFilter ByCountryCode(string value)
+    {
+        return FilterBy("institutions.country_code", value);
+    }
+
+    public WorksFilter ByInstitutionsId(string value)
+    {
+        return FilterBy("institutions.id", value);
+    }
+
+    public WorksFilter ByInstitutionsRor(string value)
+    {
+        return FilterBy("institutions.ror", value);
+    }
+
+    public WorksFilter ByInstitutionsType(string value)
+    {
+        return FilterBy("institutions.type", value);
+    }
+
+    public WorksFilter IsCorresponding(bool value)
+    {
+        return FilterBy("is_corresponding", value);
+    }
+
+    public WorksFilter ByApcPaymentPrice(int value)
+    {
+        return FilterBy("apc_payment.price", value);
+    }
+
+    public WorksFilter ByApcPaymentPrice(FilterOperator filterOperator, int value)
+    {
+        return FilterBy("apc_payment.price", filterOperator, value);
+    }
+
+    public WorksFilter ByApcPaymentCurrency(string value)
+    {
+        return FilterBy("apc_payment.currency", value);
+    }
+
+    public WorksFilter ByApcPaymentProvenance(string value)
+    {
+        return FilterBy("apc_payment.provenance", value);
+    }
+
+    public WorksFilter ByApcPaymentPriceUse(int value)
+    {
+        return FilterBy("apc_payment.price_usd", value);
+    }
+
+    public WorksFilter ByApcPaymentPriceUse(FilterOperator filterOperator, int value)
+    {
+        return FilterBy("apc_payment.price_usd", filterOperator, value);
+    }
+
+    public WorksFilter ByBestOpenAccessLocationIsOpenAccess(bool value)
+    {
+        return FilterBy("best_oa_location.is_oa", value);
+    }
+
+    public WorksFilter ByBestOpenAccessLocationLicense(string value)
+    {
+        return FilterBy("best_oa_location.license", value);
+    }
+
+    public WorksFilter ByBestOpenAccessLocationSourceId(string value)
+    {
+        return FilterBy("best_oa_location.source.id", value);
+    }
+
+    public WorksFilter ByBestOpenAccessLocationSourceIssn(string value)
+    {
+        return FilterBy("best_oa_location.source.issn", value);
+    }
+
+    public WorksFilter ByBestOpenAccessLocationSourceHostOrganization(string value)
+    {
+        return FilterBy("best_oa_location.source.host_organization", value);
+    }
+
+    public WorksFilter ByBestOpenAccessLocationSourceType(string value)
+    {
+        return FilterBy("best_oa_location.source.type", value);
+    }
+
+    public WorksFilter ByBestOpenAccessLocationVersion(string value)
+    {
+        return FilterBy("best_oa_location.version", value);
+    }
+
+    public WorksFilter ByCitedByCount(int value)
+    {
+        return FilterBy("cited_by_count", value);
+    }
+
+    public WorksFilter ByCitedByCount(FilterOperator filterOperator, int value)
+    {
+        return FilterBy("cited_by_count", filterOperator, value);
+    }
+
+    public WorksFilter ByConceptsId(string value)
+    {
+        return FilterBy("concepts.id", value);
+    }
+
+    public WorksFilter ByConceptsWikidata(string value)
+    {
+        return FilterBy("concepts.wikidata", value);
+    }
+
+    public WorksFilter ByCorrespondingAuthorIds(string value)
+    {
+        return FilterBy("corresponding_author_ids", value);
+    }
+
+    public WorksFilter ByCorrespondingInstitutionIds(string value)
+    {
+        return FilterBy("corresponding_institution_ids", value);
+    }
+
     public WorksFilter SearchAbstract(string value)
     {
         return FilterBy("abstract.search", value);
