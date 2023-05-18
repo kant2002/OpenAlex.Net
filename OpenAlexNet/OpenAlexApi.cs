@@ -17,11 +17,12 @@ public class OpenAlexApi
         httpClient.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("OpenAlexApi", "0.0.1"));
     }
 
-    public async Task<ResposeInformation<Author>?> SearchAuthorsAsync(string author)
+    public async Task<ResposeInformation<Author>?> SearchAuthorsAsync(string author, int page = 1, int perPage = 0)
     {
         var builder = new UriBuilder(new Uri(BaseAddress, "/authors"));
         var query = HttpUtility.ParseQueryString("");
         query["search"] = author;
+        ApplyDefaultPaginationParameters(query, page, perPage);
         builder.Query = query.ToString();
         string url = builder.ToString();
         using var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
@@ -42,16 +43,12 @@ public class OpenAlexApi
         return response;
     }
 
-    public async Task<ResposeInformation<Work>?> FindWorksByAuthorAsync(string author, int page = 1)
+    public async Task<ResposeInformation<Work>?> SearchWorksAsync(string author, int page = 1, int perPage = 0)
     {
         var builder = new UriBuilder(new Uri(BaseAddress, "/works"));
         var query = HttpUtility.ParseQueryString("");
-        query["filter"] = $"author.id:{author}";
-        if (page > 1)
-        {
-            query["page"] = page.ToString();
-        }
-
+        query["search"] = author;
+        ApplyDefaultPaginationParameters(query, page, perPage);
         builder.Query = query.ToString();
         string url = builder.ToString();
         using var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
@@ -61,16 +58,23 @@ public class OpenAlexApi
         return response;
     }
 
-    public async Task<ResposeInformation<Work>?> FindWorksByAffiliationAsync(string affiliation, int page = 1)
+    public async Task<Work?> GetWorkAsync(string workId)
+    {
+        var builder = new UriBuilder(new Uri(BaseAddress, "/works/" + workId));
+        string url = builder.ToString();
+        using var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+        var responseMessage = await httpClient.SendAsync(requestMessage);
+        responseMessage.EnsureSuccessStatusCode();
+        var response = JsonSerializer.Deserialize<Work>(await responseMessage.Content.ReadAsStreamAsync());
+        return response;
+    }
+
+    public async Task<ResposeInformation<Work>?> FindWorksByAuthorAsync(string author, int page = 1, int perPage = 0)
     {
         var builder = new UriBuilder(new Uri(BaseAddress, "/works"));
         var query = HttpUtility.ParseQueryString("");
-        query["filter"] = $"raw_affiliation_string.search:{affiliation}";
-        if (page > 1)
-        {
-            query["page"] = page.ToString();
-        }
-
+        query["filter"] = $"author.id:{author}";
+        ApplyDefaultPaginationParameters(query, page, perPage);
         builder.Query = query.ToString();
         string url = builder.ToString();
         using var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
@@ -78,6 +82,34 @@ public class OpenAlexApi
         responseMessage.EnsureSuccessStatusCode();
         var response = JsonSerializer.Deserialize<ResposeInformation<Work>>(await responseMessage.Content.ReadAsStreamAsync());
         return response;
+    }
+
+    public async Task<ResposeInformation<Work>?> FindWorksByAffiliationAsync(string affiliation, int page = 1, int perPage = 0)
+    {
+        var builder = new UriBuilder(new Uri(BaseAddress, "/works"));
+        var query = HttpUtility.ParseQueryString("");
+        query["filter"] = $"raw_affiliation_string.search:{affiliation}";
+        ApplyDefaultPaginationParameters(query, page, perPage);
+        builder.Query = query.ToString();
+        string url = builder.ToString();
+        using var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+        var responseMessage = await httpClient.SendAsync(requestMessage);
+        responseMessage.EnsureSuccessStatusCode();
+        var response = JsonSerializer.Deserialize<ResposeInformation<Work>>(await responseMessage.Content.ReadAsStreamAsync());
+        return response;
+    }
+
+    private static void ApplyDefaultPaginationParameters(System.Collections.Specialized.NameValueCollection query, int page, int perPage)
+    {
+        if (page > 1)
+        {
+            query["page"] = page.ToString();
+        }
+
+        if (perPage > 0)
+        {
+            query["per-page"] = perPage.ToString();
+        }
     }
 }
 
@@ -94,33 +126,6 @@ public class Biblio
 
     [JsonPropertyName("last_page")]
     public object LastPage { get; set; }
-}
-
-public class Concept
-{
-    [JsonPropertyName("id")]
-    public string Id { get; set; }
-
-    [JsonPropertyName("wikidata")]
-    public string Wikidata { get; set; }
-
-    [JsonPropertyName("display_name")]
-    public string DisplayName { get; set; }
-
-    [JsonPropertyName("level")]
-    public int? Level { get; set; }
-
-    [JsonPropertyName("score")]
-    public double? Score { get; set; }
-}
-
-public class WorkIds
-{
-    [JsonPropertyName("openalex")]
-    public string Openalex { get; set; }
-
-    [JsonPropertyName("doi")]
-    public string Doi { get; set; }
 }
 
 public class DehydratedSource

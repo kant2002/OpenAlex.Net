@@ -62,7 +62,7 @@ public class Work
     public bool? IsParatext { get; set; }
 
     [JsonPropertyName("concepts")]
-    public List<Concept> Concepts { get; set; }
+    public List<DehydratedConcept> Concepts { get; set; }
 
     [JsonPropertyName("mesh")]
     public List<object> Mesh { get; set; }
