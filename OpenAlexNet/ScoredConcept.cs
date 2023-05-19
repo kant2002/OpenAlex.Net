@@ -2,7 +2,7 @@
 
 namespace OpenAlexNet;
 
-public class AuthorConcept: DehydratedConcept
+public class ScoredConcept: DehydratedConcept
 {
     /// <summary>
     /// Gets or sets The strength of association between this author and the listed concept, from 0-100.

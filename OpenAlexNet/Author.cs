@@ -69,7 +69,7 @@ public class Author
     /// Gets or sets the concepts most frequently applied to works created by this author.
     /// </summary>
     [JsonPropertyName("x_concepts")]
-    public List<AuthorConcept> XConcepts { get; set; }
+    public List<ScoredConcept> XConcepts { get; set; }
 
     /// <summary>
     /// Gets or sets <see cref="Author.works_count"/> and <see cref="Author.cited_by_count"/> for each of the last ten years, binned by year.
@@ -79,7 +79,7 @@ public class Author
     /// <para>Any works or citations older than ten years old aren't included. Years with zero works and zero citations have been removed so you will need to add those in if you need them.</para>
     /// </remarks>
     [JsonPropertyName("counts_by_year")]
-    public List<AuthorWorkCountsByYear> CountsByYear { get; set; }
+    public List<WorksAndCitationsCountsByYear> CountsByYear { get; set; }
 
     /// <summary>
     /// Gets or sets a URL that will get you a list of all this author's works.

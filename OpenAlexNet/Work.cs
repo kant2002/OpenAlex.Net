@@ -95,7 +95,7 @@ public class Work
     public string CitedByApiUrl { get; set; }
 
     [JsonPropertyName("counts_by_year")]
-    public List<WorkCountsByYear> CountsByYear { get; set; }
+    public List<CitationsCountsByYear> CountsByYear { get; set; }
 
     [JsonPropertyName("updated_date")]
     public DateTime? UpdatedDate { get; set; }

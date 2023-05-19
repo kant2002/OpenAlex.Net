@@ -2,7 +2,7 @@
 
 namespace OpenAlexNet;
 
-public class AuthorWorkCountsByYear
+public class WorksAndCitationsCountsByYear
 {
     [JsonPropertyName("year")]
     public int? Year { get; set; }
