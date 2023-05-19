@@ -9,18 +9,28 @@ var api = new OpenAlexApi(httpClient);
 HashSet<string> affiliations = new();
 HashSet<string> othersAffiliations = new();
 
-var authorOrInstitutionName = args.ElementAtOrDefault(0);
+var authorOrInstitutionName = args.ElementAtOrDefault(0) ?? "Rosneft";
 //await FindAuthorWorks(authorOrInstitutionName);
-int page = 1;
-var works = await api.FindWorksByAffiliationAsync(authorOrInstitutionName, page);
-while (works.Meta.PerPage * works.Meta.Page < works.Meta.Count)
+// await SearchWorksByAffiliations(authorOrInstitutionName);
+var institutions = await api.SearchInstitutionsAsync(authorOrInstitutionName);
+foreach (var institution in institutions.Results)
 {
-    PrintWorks(works.Results);
-    page++;
-    works = await api.FindWorksByAffiliationAsync(authorOrInstitutionName, page);
+    Console.WriteLine($"{institution.DisplayName}");
 }
 
-PrintWorks(works.Results);
+async Task SearchWorksByAffiliations(string institutionName)
+{
+    int page = 1;
+    var works = await api.FindWorksByAffiliationAsync(institutionName, page);
+    while (works.Meta.PerPage * works.Meta.Page < works.Meta.Count)
+    {
+        PrintWorks(works.Results);
+        page++;
+        works = await api.FindWorksByAffiliationAsync(institutionName, page);
+    }
+
+    PrintWorks(works.Results);
+}
 
 void PrintWorks(List<Work> works)
 {

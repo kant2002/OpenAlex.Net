@@ -1,353 +1,354 @@
 ﻿namespace OpenAlexNet;
+using FilterClass = WorksFilter;
 
 public class WorksFilter
 {
     private readonly List<(string, string)> filterValues = new();
 
-    public WorksFilter ByAuthorId(string value)
+    public FilterClass ByAuthorId(string value)
     {
         return FilterBy("author.id", value);
     }
 
-    public WorksFilter ByOrcId(string value)
+    public FilterClass ByOrcId(string value)
     {
         return FilterBy("author.orcid", value);
     }
 
-    public WorksFilter ByCountryCode(string value)
+    public FilterClass ByCountryCode(string value)
     {
         return FilterBy("institutions.country_code", value);
     }
 
-    public WorksFilter ByInstitutionsId(string value)
+    public FilterClass ByInstitutionsId(string value)
     {
         return FilterBy("institutions.id", value);
     }
 
-    public WorksFilter ByInstitutionsRor(string value)
+    public FilterClass ByInstitutionsRor(string value)
     {
         return FilterBy("institutions.ror", value);
     }
 
-    public WorksFilter ByInstitutionsType(string value)
+    public FilterClass ByInstitutionsType(string value)
     {
         return FilterBy("institutions.type", value);
     }
 
-    public WorksFilter IsCorresponding(bool value)
+    public FilterClass IsCorresponding(bool value)
     {
         return FilterBy("is_corresponding", value);
     }
 
-    public WorksFilter ByApcPaymentPrice(int value)
+    public FilterClass ByApcPaymentPrice(int value)
     {
         return FilterBy("apc_payment.price", value);
     }
 
-    public WorksFilter ByApcPaymentPrice(FilterOperator filterOperator, int value)
+    public FilterClass ByApcPaymentPrice(FilterOperator filterOperator, int value)
     {
         return FilterBy("apc_payment.price", filterOperator, value);
     }
 
-    public WorksFilter ByApcPaymentCurrency(string value)
+    public FilterClass ByApcPaymentCurrency(string value)
     {
         return FilterBy("apc_payment.currency", value);
     }
 
-    public WorksFilter ByApcPaymentProvenance(string value)
+    public FilterClass ByApcPaymentProvenance(string value)
     {
         return FilterBy("apc_payment.provenance", value);
     }
 
-    public WorksFilter ByApcPaymentPriceUse(int value)
+    public FilterClass ByApcPaymentPriceUse(int value)
     {
         return FilterBy("apc_payment.price_usd", value);
     }
 
-    public WorksFilter ByApcPaymentPriceUse(FilterOperator filterOperator, int value)
+    public FilterClass ByApcPaymentPriceUse(FilterOperator filterOperator, int value)
     {
         return FilterBy("apc_payment.price_usd", filterOperator, value);
     }
 
-    public WorksFilter ByBestOpenAccessLocationIsOpenAccess(bool value)
+    public FilterClass ByBestOpenAccessLocationIsOpenAccess(bool value)
     {
         return FilterBy("best_oa_location.is_oa", value);
     }
 
-    public WorksFilter ByBestOpenAccessLocationLicense(string value)
+    public FilterClass ByBestOpenAccessLocationLicense(string value)
     {
         return FilterBy("best_oa_location.license", value);
     }
 
-    public WorksFilter ByBestOpenAccessLocationSourceId(string value)
+    public FilterClass ByBestOpenAccessLocationSourceId(string value)
     {
         return FilterBy("best_oa_location.source.id", value);
     }
 
-    public WorksFilter ByBestOpenAccessLocationSourceIssn(string value)
+    public FilterClass ByBestOpenAccessLocationSourceIssn(string value)
     {
         return FilterBy("best_oa_location.source.issn", value);
     }
 
-    public WorksFilter ByBestOpenAccessLocationSourceHostOrganization(string value)
+    public FilterClass ByBestOpenAccessLocationSourceHostOrganization(string value)
     {
         return FilterBy("best_oa_location.source.host_organization", value);
     }
 
-    public WorksFilter ByBestOpenAccessLocationSourceType(string value)
+    public FilterClass ByBestOpenAccessLocationSourceType(string value)
     {
         return FilterBy("best_oa_location.source.type", value);
     }
 
-    public WorksFilter ByBestOpenAccessLocationVersion(string value)
+    public FilterClass ByBestOpenAccessLocationVersion(string value)
     {
         return FilterBy("best_oa_location.version", value);
     }
 
-    public WorksFilter ByCitedByCount(int value)
+    public FilterClass ByCitedByCount(int value)
     {
         return FilterBy("cited_by_count", value);
     }
 
-    public WorksFilter ByCitedByCount(FilterOperator filterOperator, int value)
+    public FilterClass ByCitedByCount(FilterOperator filterOperator, int value)
     {
         return FilterBy("cited_by_count", filterOperator, value);
     }
 
-    public WorksFilter ByConceptsId(string value)
+    public FilterClass ByConceptsId(string value)
     {
         return FilterBy("concepts.id", value);
     }
 
-    public WorksFilter ByConceptsWikidata(string value)
+    public FilterClass ByConceptsWikidata(string value)
     {
         return FilterBy("concepts.wikidata", value);
     }
 
-    public WorksFilter ByCorrespondingAuthorIds(string value)
+    public FilterClass ByCorrespondingAuthorIds(string value)
     {
         return FilterBy("corresponding_author_ids", value);
     }
 
-    public WorksFilter ByCorrespondingInstitutionIds(string value)
+    public FilterClass ByCorrespondingInstitutionIds(string value)
     {
         return FilterBy("corresponding_institution_ids", value);
     }
 
-    public WorksFilter SearchAbstract(string value)
+    public FilterClass SearchAbstract(string value)
     {
         return FilterBy("abstract.search", value);
     }
 
-    public WorksFilter ByInstitutionContinent(string value)
+    public FilterClass ByInstitutionContinent(string value)
     {
         return FilterBy("authorships.institutions.continent", value);
     }
 
-    public WorksFilter IsInstitutionGlobalSouth(bool value)
+    public FilterClass IsInstitutionGlobalSouth(bool value)
     {
         return FilterBy("authorships.institutions.is_global_south", value);
     }
 
-    public WorksFilter ByAuthorsCount(int count)
+    public FilterClass ByAuthorsCount(int count)
     {
         return ByAuthorsCount(FilterOperator.Equals, count);
     }
 
-    public WorksFilter ByAuthorsCount(FilterOperator filterOperator, int value)
+    public FilterClass ByAuthorsCount(FilterOperator filterOperator, int value)
     {
         return FilterBy("authors_count", filterOperator, value);
     }
 
-    public WorksFilter ByBestOpenVersion(string value)
+    public FilterClass ByBestOpenVersion(string value)
     {
         return FilterBy("best_open_version", value);
     }
 
-    public WorksFilter CitedBy(string value)
+    public FilterClass CitedBy(string value)
     {
         return FilterBy("cited_by", value);
     }
 
-    public WorksFilter Cites(string value)
+    public FilterClass Cites(string value)
     {
         return FilterBy("cities", value);
     }
 
-    public WorksFilter ConceptsCount(int value)
+    public FilterClass ConceptsCount(int value)
     {
         return FilterBy("concepts_count", value);
     }
 
-    public WorksFilter ConceptsCount(FilterOperator filterOperator, int value)
+    public FilterClass ConceptsCount(FilterOperator filterOperator, int value)
     {
         return FilterBy("concepts_count", filterOperator, value);
     }
 
-    public WorksFilter DefaultSearch(string value)
+    public FilterClass DefaultSearch(string value)
     {
         return FilterBy("default.search", value);
     }
 
-    public WorksFilter DisplayNameSearch(string value)
+    public FilterClass DisplayNameSearch(string value)
     {
         return FilterBy("display_name.search", value);
     }
 
-    public WorksFilter FromCreatedDate(string value)
+    public FilterClass FromCreatedDate(string value)
     {
         return FilterBy("from_created_date", value);
     }
 
 #if NET6_0_OR_GREATER
-    public WorksFilter FromCreatedDate(DateOnly value)
+    public FilterClass FromCreatedDate(DateOnly value)
     {
         return FilterBy("from_created_date", value);
     }
 #endif
 
-    public WorksFilter FromPublicationDate(string value)
+    public FilterClass FromPublicationDate(string value)
     {
         return FilterBy("from_publication_date", value);
     }
 
 #if NET6_0_OR_GREATER
-    public WorksFilter FromPublicationDate(DateOnly value)
+    public FilterClass FromPublicationDate(DateOnly value)
     {
         return FilterBy("from_publication_date", value);
     }
 #endif
 
-    public WorksFilter FromUpdatedDate(string value)
+    public FilterClass FromUpdatedDate(string value)
     {
         return FilterBy("from_updated_date", value);
     }
 
-    public WorksFilter FromUpdatedDate(DateTime value)
+    public FilterClass FromUpdatedDate(DateTime value)
     {
         return FilterBy("from_updated_date", value);
     }
 
-    public WorksFilter FullTextSearch(string value)
+    public FilterClass FullTextSearch(string value)
     {
         return FilterBy("fulltext.search", value);
     }
 
-    public WorksFilter HasDoi(bool value)
+    public FilterClass HasDoi(bool value)
     {
         return FilterBy("has_doi", value);
     }
 
-    public WorksFilter HasOpenAccessAcceptedOrPublishedVersion(bool value)
+    public FilterClass HasOpenAccessAcceptedOrPublishedVersion(bool value)
     {
         return FilterBy("has_oa_accepted_or_published_version", value);
     }
 
-    public WorksFilter HasOpenAccessSubmittedVersion(bool value)
+    public FilterClass HasOpenAccessSubmittedVersion(bool value)
     {
         return FilterBy("has_oa_submitted_version", value);
     }
 
-    public WorksFilter HasOrcId(bool value)
+    public FilterClass HasOrcId(bool value)
     {
         return FilterBy("has_orcid", value);
     }
 
-    public WorksFilter HasPmcId(bool value)
+    public FilterClass HasPmcId(bool value)
     {
         return FilterBy("has_pmcid", value);
     }
 
-    public WorksFilter HasPmId(bool value)
+    public FilterClass HasPmId(bool value)
     {
         return FilterBy("has_pmid", value);
     }
 
-    public WorksFilter HasNgrams(bool value)
+    public FilterClass HasNgrams(bool value)
     {
         return FilterBy("has_ngrams", value);
     }
 
-    public WorksFilter HasReferences(bool value)
+    public FilterClass HasReferences(bool value)
     {
         return FilterBy("has_references", value);
     }
 
-    public WorksFilter Journal(string value)
+    public FilterClass Journal(string value)
     {
         return FilterBy("journal", value);
     }
 
-    public WorksFilter HostInstitutionLineage(string value)
+    public FilterClass HostInstitutionLineage(string value)
     {
         return FilterBy("locations.source.host_institution_lineage", value);
     }
 
-    public WorksFilter PublisherLineage(string value)
+    public FilterClass PublisherLineage(string value)
     {
         return FilterBy("locations.source.publisher_lineage", value);
     }
 
-    public WorksFilter HasIssn(bool value)
+    public FilterClass HasIssn(bool value)
     {
         return FilterBy("primary_location.source.has_issn", value);
     }
 
-    public WorksFilter SearchRawAffiliationString(string value)
+    public FilterClass SearchRawAffiliationString(string value)
     {
         return FilterBy("raw_affiliation_string.search", value);
     }
 
-    public WorksFilter RelatedTo(string value)
+    public FilterClass RelatedTo(string value)
     {
         return FilterBy("related_to", value);
     }
 
-    public WorksFilter Repository(string value)
+    public FilterClass Repository(string value)
     {
         return FilterBy("repository", value);
     }
 
-    public WorksFilter ToPublicationDate(string value)
+    public FilterClass ToPublicationDate(string value)
     {
         return FilterBy("to_publication_date", value);
     }
 
 #if NET6_0_OR_GREATER
-    public WorksFilter ToPublicationDate(DateOnly value)
+    public FilterClass ToPublicationDate(DateOnly value)
     {
         return FilterBy("to_publication_date", value);
     }
 #endif
 
-    public WorksFilter Version(string value)
+    public FilterClass Version(string value)
     {
         return FilterBy("version", value);
     }
 
-    public WorksFilter FilterBy(string key, string value)
+    public FilterClass FilterBy(string key, string value)
     {
         filterValues.Add((key, value));
         return this;
     }
 
-    public WorksFilter FilterBy(string key, bool value)
+    public FilterClass FilterBy(string key, bool value)
     {
         filterValues.Add((key, value ? "true" : "false"));
         return this;
     }
 
-    public WorksFilter FilterBy(string key, int value)
+    public FilterClass FilterBy(string key, int value)
     {
         return FilterBy(key, FilterOperator.Equals, value);
     }
 
-    public WorksFilter FilterBy(string key, FilterOperator filterOperator, int value)
+    public FilterClass FilterBy(string key, FilterOperator filterOperator, int value)
     {
         return FilterBy(key, GetFilterOperatorPrefix(filterOperator) + value.ToString());
     }
 
-    public WorksFilter FilterBy(string key, DateTime value)
+    public FilterClass FilterBy(string key, DateTime value)
     {
         filterValues.Add((key, value.ToString("yyyy-MM-dd")));
         return this;
@@ -355,7 +356,7 @@ public class WorksFilter
 
 #if NET6_0_OR_GREATER
 
-    public WorksFilter FilterBy(string key, DateOnly value)
+    public FilterClass FilterBy(string key, DateOnly value)
     {
         filterValues.Add((key, value.ToString("yyyy-MM-dd")));
         return this;

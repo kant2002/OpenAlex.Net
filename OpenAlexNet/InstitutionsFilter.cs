@@ -1,157 +1,158 @@
 ﻿namespace OpenAlexNet;
+using FilterClass = InstitutionsFilter;
 
 public class InstitutionsFilter
 {
     private readonly List<(string, string)> filterValues = new();
 
-    public InstitutionsFilter ByCitedByCount(int value)
+    public FilterClass ByCitedByCount(int value)
     {
         return FilterBy("cited_by_count", value);
     }
 
-    public InstitutionsFilter ByCitedByCount(FilterOperator filterOperator, int value)
+    public FilterClass ByCitedByCount(FilterOperator filterOperator, int value)
     {
         return FilterBy("cited_by_count", filterOperator, value);
     }
 
-    public InstitutionsFilter ByCountryCode(string value)
+    public FilterClass ByCountryCode(string value)
     {
         return FilterBy("country_code", value);
     }
 
-    public InstitutionsFilter ByOpenAlex(string value)
+    public FilterClass ByOpenAlex(string value)
     {
         return FilterBy("openalex", value);
     }
 
-    public InstitutionsFilter ByRepositoriesHostOrganization(string value)
+    public FilterClass ByRepositoriesHostOrganization(string value)
     {
         return FilterBy("repositories.host_organization", value);
     }
 
-    public InstitutionsFilter ByRepositoriesHostOrganizationLineage(string value)
+    public FilterClass ByRepositoriesHostOrganizationLineage(string value)
     {
         return FilterBy("repositories.host_organization_lineage", value);
     }
 
-    public InstitutionsFilter ByRepositoriesId(string value)
+    public FilterClass ByRepositoriesId(string value)
     {
         return FilterBy("repositories.id", value);
     }
 
-    public InstitutionsFilter BySummaryStats2YearMeanCitedness(double value)
+    public FilterClass BySummaryStats2YearMeanCitedness(double value)
     {
         return FilterBy("summary_stats.2yr_mean_citedness", value);
     }
 
-    public InstitutionsFilter BySummaryStats2YearMeanCitedness(FilterOperator filterOperator, double value)
+    public FilterClass BySummaryStats2YearMeanCitedness(FilterOperator filterOperator, double value)
     {
         return FilterBy("summary_stats.2yr_mean_citedness", filterOperator, value);
     }
 
-    public InstitutionsFilter BySummaryStatsHIndex(int value)
+    public FilterClass BySummaryStatsHIndex(int value)
     {
         return FilterBy("summary_stats.h_index", value);
     }
 
-    public InstitutionsFilter BySummaryStatsHIndex(FilterOperator filterOperator, int value)
+    public FilterClass BySummaryStatsHIndex(FilterOperator filterOperator, int value)
     {
         return FilterBy("summary_stats.h_index", filterOperator, value);
     }
 
-    public InstitutionsFilter BySummaryStatsI10Index(int value)
+    public FilterClass BySummaryStatsI10Index(int value)
     {
         return FilterBy("summary_stats.i10_index", value);
     }
 
-    public InstitutionsFilter BySummaryStatsI10Index(FilterOperator filterOperator, int value)
+    public FilterClass BySummaryStatsI10Index(FilterOperator filterOperator, int value)
     {
         return FilterBy("summary_stats.i10_index", filterOperator, value);
     }
 
-    public InstitutionsFilter ByRor(string value)
+    public FilterClass ByRor(string value)
     {
         return FilterBy("ror", value);
     }
 
-    public InstitutionsFilter ByType(string value)
+    public FilterClass ByType(string value)
     {
         return FilterBy("type", value);
     }
 
-    public InstitutionsFilter ByWorksCount(int value)
+    public FilterClass ByWorksCount(int value)
     {
         return FilterBy("works_count", value);
     }
 
-    public InstitutionsFilter ByWorksCount(FilterOperator filterOperator, int value)
+    public FilterClass ByWorksCount(FilterOperator filterOperator, int value)
     {
         return FilterBy("works_count", filterOperator, value);
     }
 
-    public InstitutionsFilter ByXConceptsId(string value)
+    public FilterClass ByXConceptsId(string value)
     {
         return FilterBy("x_concepts.id", value);
     }
 
-    public InstitutionsFilter Continent(string value)
+    public FilterClass Continent(string value)
     {
         return FilterBy("continent", value);
     }
 
-    public InstitutionsFilter DefaultSearch(string value)
+    public FilterClass DefaultSearch(string value)
     {
         return FilterBy("default.search", value);
     }
 
-    public InstitutionsFilter DisplayNameSearch(string value)
+    public FilterClass DisplayNameSearch(string value)
     {
         return FilterBy("display_name.search", value);
     }
 
-    public InstitutionsFilter HasRorId(bool value)
+    public FilterClass HasRorId(bool value)
     {
         return FilterBy("has_ror", value);
     }
 
-    public InstitutionsFilter IsGlobalSouth(string value)
+    public FilterClass IsGlobalSouth(string value)
     {
         return FilterBy("InstitutionsFilter", value);
     }
 
-    public InstitutionsFilter FilterBy(string key, string value)
+    public FilterClass FilterBy(string key, string value)
     {
         filterValues.Add((key, value));
         return this;
     }
 
-    public InstitutionsFilter FilterBy(string key, bool value)
+    public FilterClass FilterBy(string key, bool value)
     {
         filterValues.Add((key, value ? "true" : "false"));
         return this;
     }
 
-    public InstitutionsFilter FilterBy(string key, int value)
+    public FilterClass FilterBy(string key, int value)
     {
         return FilterBy(key, FilterOperator.Equals, value);
     }
 
-    public InstitutionsFilter FilterBy(string key, FilterOperator filterOperator, int value)
+    public FilterClass FilterBy(string key, FilterOperator filterOperator, int value)
     {
         return FilterBy(key, GetFilterOperatorPrefix(filterOperator) + value.ToString());
     }
 
-    public InstitutionsFilter FilterBy(string key, double value)
+    public FilterClass FilterBy(string key, double value)
     {
         return FilterBy(key, FilterOperator.Equals, value);
     }
 
-    public InstitutionsFilter FilterBy(string key, FilterOperator filterOperator, double value)
+    public FilterClass FilterBy(string key, FilterOperator filterOperator, double value)
     {
         return FilterBy(key, GetFilterOperatorPrefix(filterOperator) + value.ToString());
     }
 
-    public InstitutionsFilter FilterBy(string key, DateTime value)
+    public FilterClass FilterBy(string key, DateTime value)
     {
         filterValues.Add((key, value.ToString("yyyy-MM-dd")));
         return this;
@@ -159,7 +160,7 @@ public class InstitutionsFilter
 
 #if NET6_0_OR_GREATER
 
-    public InstitutionsFilter FilterBy(string key, DateOnly value)
+    public FilterClass FilterBy(string key, DateOnly value)
     {
         filterValues.Add((key, value.ToString("yyyy-MM-dd")));
         return this;
