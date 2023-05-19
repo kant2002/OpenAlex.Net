@@ -25,6 +25,11 @@ public class WorksFilter
         return FilterBy("institutions.id", value);
     }
 
+    public FilterClass ByInstitutionsId(IEnumerable<string> value)
+    {
+        return FilterBy("institutions.id", value);
+    }
+
     public FilterClass ByInstitutionsRor(string value)
     {
         return FilterBy("institutions.ror", value);
@@ -332,6 +337,12 @@ public class WorksFilter
         return this;
     }
 
+    public FilterClass FilterBy(string key, IEnumerable<string> value)
+    {
+        filterValues.Add((key, string.Join("|", value)));
+        return this;
+    }
+
     public FilterClass FilterBy(string key, bool value)
     {
         filterValues.Add((key, value ? "true" : "false"));
@@ -341,6 +352,11 @@ public class WorksFilter
     public FilterClass FilterBy(string key, int value)
     {
         return FilterBy(key, FilterOperator.Equals, value);
+    }
+
+    public FilterClass FilterBy(string key, IEnumerable<int> value)
+    {
+        return FilterBy(key, string.Join("|", value));
     }
 
     public FilterClass FilterBy(string key, FilterOperator filterOperator, int value)

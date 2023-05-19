@@ -9,7 +9,7 @@ var api = new OpenAlexApi(httpClient);
 HashSet<string> affiliations = new();
 HashSet<string> othersAffiliations = new();
 
-var authorOrInstitutionName = args.ElementAtOrDefault(0) ?? "Rosneft";
+var authorOrInstitutionName = args.ElementAtOrDefault(0) ?? "Italiana";
 //await FindAuthorWorks(authorOrInstitutionName);
 // await SearchWorksByAffiliations(authorOrInstitutionName);
 var institutions = await api.SearchInstitutionsAsync(authorOrInstitutionName);
@@ -17,6 +17,11 @@ foreach (var institution in institutions.Results)
 {
     Console.WriteLine($"{institution.DisplayName}");
 }
+
+var workFilter = new WorksFilter();
+workFilter.ByInstitutionsId(institutions.Results.Select(_ => _.Id.Replace("https://openalex.org/", "")));
+var works = await api.FindWorksAsync(workFilter);
+PrintWorks(works.Results);
 
 async Task SearchWorksByAffiliations(string institutionName)
 {

@@ -116,6 +116,12 @@ public class AuthorsFilter
         return this;
     }
 
+    public FilterClass FilterBy(string key, IEnumerable<string> value)
+    {
+        filterValues.Add((key, string.Join("|", value)));
+        return this;
+    }
+
     public FilterClass FilterBy(string key, bool value)
     {
         filterValues.Add((key, value ? "true" : "false"));
@@ -125,6 +131,11 @@ public class AuthorsFilter
     public FilterClass FilterBy(string key, int value)
     {
         return FilterBy(key, FilterOperator.Equals, value);
+    }
+
+    public FilterClass FilterBy(string key, IEnumerable<int> value)
+    {
+        return FilterBy(key, string.Join("|", value));
     }
 
     public FilterClass FilterBy(string key, FilterOperator filterOperator, int value)
