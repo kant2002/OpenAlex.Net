@@ -1,4 +1,6 @@
 ﻿namespace OpenAlexNet;
+
+using System.Web;
 using FilterClass = WorksFilter;
 
 public class WorksFilter
@@ -345,7 +347,7 @@ public class WorksFilter
 
     public FilterClass FilterBy(string key, bool value)
     {
-        filterValues.Add((key, value ? "true" : "false"));
+        FilterBy(key, value ? "true" : "false");
         return this;
     }
 
@@ -366,7 +368,7 @@ public class WorksFilter
 
     public FilterClass FilterBy(string key, DateTime value)
     {
-        filterValues.Add((key, value.ToString("yyyy-MM-dd")));
+        FilterBy(key, value.ToString("yyyy-MM-dd"));
         return this;
     }
 
@@ -374,7 +376,7 @@ public class WorksFilter
 
     public FilterClass FilterBy(string key, DateOnly value)
     {
-        filterValues.Add((key, value.ToString("yyyy-MM-dd")));
+        FilterBy(key, value.ToString("yyyy-MM-dd"));
         return this;
     }
 #endif
@@ -390,6 +392,6 @@ public class WorksFilter
 
     public override string ToString()
     {
-        return string.Join(",", filterValues.Select(_ => $"{_.Item1}:{_.Item2}"));
+        return string.Join(",", filterValues.Select(_ => $"{_.Item1}:{HttpUtility.UrlPathEncode(_.Item2)}"));
     }
 }

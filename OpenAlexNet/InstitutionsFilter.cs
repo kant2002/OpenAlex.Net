@@ -1,4 +1,6 @@
 ﻿namespace OpenAlexNet;
+
+using System.Web;
 using FilterClass = InstitutionsFilter;
 
 public class InstitutionsFilter
@@ -16,6 +18,11 @@ public class InstitutionsFilter
     }
 
     public FilterClass ByCountryCode(string value)
+    {
+        return FilterBy("country_code", value);
+    }
+
+    public FilterClass ByCountryCode(IEnumerable<string> value)
     {
         return FilterBy("country_code", value);
     }
@@ -189,6 +196,6 @@ public class InstitutionsFilter
 
     public override string ToString()
     {
-        return string.Join(",", filterValues.Select(_ => $"{_.Item1}:{_.Item2}"));
+        return string.Join(",", filterValues.Select(_ => $"{_.Item1}:{HttpUtility.UrlPathEncode(_.Item2)}"));
     }
 }

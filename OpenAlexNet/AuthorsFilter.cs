@@ -1,4 +1,6 @@
 ﻿namespace OpenAlexNet;
+
+using System.Web;
 using FilterClass = AuthorsFilter;
 
 public class AuthorsFilter
@@ -179,6 +181,6 @@ public class AuthorsFilter
 
     public override string ToString()
     {
-        return string.Join(",", filterValues.Select(_ => $"{_.Item1}:{_.Item2}"));
+        return string.Join(",", filterValues.Select(_ => $"{_.Item1}:{HttpUtility.UrlPathEncode(_.Item2)}"));
     }
 }

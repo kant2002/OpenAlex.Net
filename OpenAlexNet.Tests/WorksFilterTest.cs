@@ -10,7 +10,7 @@ namespace OpenAlexNet.Tests
 
             sut.ByAuthorId("my author");
 
-            Assert.AreEqual("author.id:my author", sut.ToString());
+            Assert.AreEqual("author.id:my%20author", sut.ToString());
         }
 
         [TestMethod]
@@ -20,7 +20,7 @@ namespace OpenAlexNet.Tests
 
             sut.SearchRawAffiliationString("super secret org");
 
-            Assert.AreEqual("raw_affiliation_string.search:super secret org", sut.ToString());
+            Assert.AreEqual("raw_affiliation_string.search:super%20secret%20org", sut.ToString());
         }
     }
 }
