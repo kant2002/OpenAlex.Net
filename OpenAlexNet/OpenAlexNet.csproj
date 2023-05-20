@@ -7,10 +7,19 @@
     <Nullable>enable</Nullable>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Authors>Andrii Kurdiumov</Authors>
+    <PackageTags>OpenAlex;Research database;Research;ROR;</PackageTags>
+    <Description>
+      Provides C# wrappers to OpenAlex API (https://openalex.org)
+    </Description>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Text.Json" Version="7.0.2" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
   </ItemGroup>
 
   <ItemGroup>
