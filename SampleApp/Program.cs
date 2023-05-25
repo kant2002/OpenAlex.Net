@@ -1,6 +1,7 @@
 ﻿using OpenAlexNet;
 using System.Diagnostics;
-using System.Net;
+using System.Diagnostics.Metrics;
+using System.Text.Json;
 
 var httpClient = new HttpClient();
 var api = new OpenAlexApi(httpClient);
@@ -12,16 +13,62 @@ HashSet<string> othersAffiliations = new();
 var authorOrInstitutionName = args.ElementAtOrDefault(0) ?? "Italiana";
 //await FindAuthorWorks(authorOrInstitutionName);
 // await SearchWorksByAffiliations(authorOrInstitutionName);
-var institutions = await api.SearchInstitutionsAsync(authorOrInstitutionName);
-foreach (var institution in institutions.Results)
+//await MultipleInstitutionsWork(authorOrInstitutionName);
+// FindGrants("work.json");
+async Task FindGrants(string institutionsFile)
 {
-    Console.WriteLine($"{institution.DisplayName}");
+    var works = JsonSerializer.Deserialize<List<Work>>(File.OpenRead(institutionsFile));
+    var institutions = works.SelectMany(_ => _.Authorships.SelectMany(a => a.Institutions)).DistinctBy(_ => _.Id).ToList();
+
+    // PrintInstitutions(institutions);
+
+    Console.WriteLine($"==== by countries ==== ");
+    foreach (var country in institutions.GroupBy(i => i.CountryCode).OrderByDescending(_ => _.Count()))
+    {
+        Console.WriteLine($"{country.Key} - {country.Count()}");
+    }
+
+    Console.WriteLine($"==== by types ==== ");
+    foreach (var country in institutions.GroupBy(i => i.Type).OrderByDescending(_ => _.Count()))
+    {
+        Console.WriteLine($"{country.Key} - {country.Count()}");
+    }
+
+    var worksWithGrands = works.Where(_ => _.Grants is not null && _.Grants.Count > 0).ToList();
+    var grants = works.SelectMany(_ => _.Grants ?? new()).DistinctBy(_ => _.Funder).ToList();
+    Console.WriteLine($"Funders count: {grants.Count}");
+    foreach (var grant in grants)
+    {
+        var funder = await api.GetFunderAsync(grant.Funder.Replace("https://openalex.org/", ""));
+        Console.WriteLine($"{funder.Id} - {funder.CountryCode} - {funder.HomePageUrl} - {funder.DisplayName}");
+    }
+
+    var awards = works.SelectMany(_ => _.Grants ?? new()).DistinctBy(_ => _.AwardId).ToList();
+
+    Console.WriteLine($"Awards count: {awards.Count}");
 }
 
-var workFilter = new WorksFilter();
-workFilter.ByInstitutionsId(institutions.Results.Select(_ => _.Id.Replace("https://openalex.org/", "")));
-var works = await api.FindWorksAsync(workFilter);
-PrintWorks(works.Results);
+static void PrintInstitutions(List<DehydratedInstitution> institutions)
+{
+    foreach (var institution in institutions)
+    {
+        Console.WriteLine($"{institution.Ror} - {institution.CountryCode} - {institution.Type} - {institution.DisplayName}");
+    }
+}
+
+async Task MultipleInstitutionsWork(string institutionName)
+{
+    var institutions = await api.SearchInstitutionsAsync(institutionName);
+    foreach (var institution in institutions.Results)
+    {
+        Console.WriteLine($"{institution.DisplayName}");
+    }
+
+    var workFilter = new WorksFilter();
+    workFilter.ByInstitutionsId(institutions.Results.Select(_ => _.Id.Replace("https://openalex.org/", "")));
+    var works = await api.FindWorksAsync(workFilter);
+    PrintWorks(works.Results);
+}
 
 async Task SearchWorksByAffiliations(string institutionName)
 {
@@ -37,7 +84,7 @@ async Task SearchWorksByAffiliations(string institutionName)
     PrintWorks(works.Results);
 }
 
-void PrintWorks(List<Work> works)
+static void PrintWorks(List<Work> works)
 {
     foreach (Work work in works)
     {
