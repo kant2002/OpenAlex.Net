@@ -1,6 +1,7 @@
 ﻿using OpenAlexNet;
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
+using System.Reflection;
 using System.Text.Json;
 
 var httpClient = new HttpClient();
@@ -14,7 +15,8 @@ var authorOrInstitutionName = args.ElementAtOrDefault(0) ?? "Italiana";
 //await FindAuthorWorks(authorOrInstitutionName);
 // await SearchWorksByAffiliations(authorOrInstitutionName);
 //await MultipleInstitutionsWork(authorOrInstitutionName);
-// FindGrants("work.json");
+//await FindGrants(@"work.json");
+await FindAwards(@"work.json");
 async Task FindGrants(string institutionsFile)
 {
     var works = JsonSerializer.Deserialize<List<Work>>(File.OpenRead(institutionsFile));
@@ -27,6 +29,8 @@ async Task FindGrants(string institutionsFile)
     {
         Console.WriteLine($"{country.Key} - {country.Count()}");
     }
+
+    var authorships = works.SelectMany(_ => _.Authorships).DistinctBy(_ => _.Author.DisplayName).ToList();
 
     Console.WriteLine($"==== by types ==== ");
     foreach (var country in institutions.GroupBy(i => i.Type).OrderByDescending(_ => _.Count()))
@@ -43,9 +47,46 @@ async Task FindGrants(string institutionsFile)
         Console.WriteLine($"{funder.Id} - {funder.CountryCode} - {funder.HomePageUrl} - {funder.DisplayName}");
     }
 
-    var awards = works.SelectMany(_ => _.Grants ?? new()).DistinctBy(_ => _.AwardId).ToList();
-
+    var awards = works.SelectMany(_ => _.Grants ?? new()).DistinctBy(_ => _.AwardId + _.Funder).ToList();
     Console.WriteLine($"Awards count: {awards.Count}");
+}
+
+async Task FindAwards(string institutionsFile)
+{
+    var works = JsonSerializer.Deserialize<List<Work>>(File.OpenRead(institutionsFile));
+    var institutions = works.SelectMany(_ => _.Authorships.SelectMany(a => a.Institutions)).DistinctBy(_ => _.Id).ToList();
+
+    var awards = works.SelectMany(_ => _.Grants ?? new()).Where(_ => !string.IsNullOrEmpty(_.AwardId)).DistinctBy(_ => _.AwardId + _.Funder).ToList();
+    Dictionary<string, Funder> fundersCache = new();
+    Console.WriteLine($"Id,Doi,PublicationDate,Title,AuthorshipsCount,FunderId,AwardId,FunderCountryCode,FunderHomePageUrl,FunderDisplayName");
+    foreach (var work in works)
+    {
+        if (work.Grants is null) continue;
+        foreach (var grant in work.Grants)
+        {
+            var funderId = grant.Funder.Replace("https://openalex.org/", "");
+            if (!fundersCache.TryGetValue(funderId, out var funder))
+            {
+                funder = await api.GetFunderAsync(funderId);
+                if (funder is null) continue;
+                fundersCache.Add(funderId, funder);
+            }
+
+            if (grant.AwardId is null) continue;
+
+            Console.WriteLine($"{work.Id},{work.Doi},{work.PublicationDate},{EscapeCsv(work.Title)},{work.Authorships.Count},{funder.Id},{EscapeCsv(grant.AwardId)},{funder.CountryCode},{funder.HomePageUrl},{EscapeCsv(funder.DisplayName)}");
+        }
+    }
+}
+
+static string EscapeCsv(string text)
+{
+    if (text.Contains('"') || text.Contains(',') || text.Contains('\n') || text.Contains('\r'))
+    {
+        return '"' + text.Replace("\"", "\"\"") + '"';
+    }
+
+    return text;
 }
 
 static void PrintInstitutions(List<DehydratedInstitution> institutions)

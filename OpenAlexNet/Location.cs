@@ -20,7 +20,7 @@ public class Location
     /// Gets or sets a URL where you can find this location as a PDF.
     /// </summary>
     [JsonPropertyName("pdf_url")]
-    public object PdfUrl { get; set; }
+    public string PdfUrl { get; set; }
 
     /// <summary>
     /// Gets or sets information about the source of this location, as a <see cref="DehydratedSource"/> object.
