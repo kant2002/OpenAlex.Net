@@ -1,7 +1,5 @@
 ﻿using OpenAlexNet;
 using System.Diagnostics;
-using System.Diagnostics.Metrics;
-using System.Reflection;
 using System.Text.Json;
 
 var httpClient = new HttpClient();
