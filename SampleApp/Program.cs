@@ -1,20 +1,55 @@
 ﻿using OpenAlexNet;
+using System.CommandLine;
 using System.Diagnostics;
 using System.Text.Json;
 
 var httpClient = new HttpClient();
 var api = new OpenAlexApi(httpClient);
-//var testAuthor = await api.GetAuthorAsync("A4328046938");
-//PrintAuthor(testAuthor);
 HashSet<string> affiliations = new();
 HashSet<string> othersAffiliations = new();
 
-var authorOrInstitutionName = args.ElementAtOrDefault(0) ?? "Italiana";
-//await FindAuthorWorks(authorOrInstitutionName);
-// await SearchWorksByAffiliations(authorOrInstitutionName);
-//await MultipleInstitutionsWork(authorOrInstitutionName);
-//await FindGrants(@"work.json");
-await FindAwards(@"work.json");
+var searchArgument = new Argument<string>
+    ("search", "An author or institution name to search for.");
+var worksOption = new Argument<FileInfo>
+    ("works", "JSON file with works saved. You can create it on https://kant2002.github.io/OpenAlexBrowser/works");
+
+var printAuthorCommand = new Command("print-author", "Print author by name.");
+printAuthorCommand.AddArgument(searchArgument);
+printAuthorCommand.SetHandler(async (search) =>
+{
+    var testAuthor = await api.GetAuthorAsync(search);
+    PrintAuthor(testAuthor);
+}, searchArgument);
+
+var findAuthorWorksCommand = new Command("author-works", "Find works of given author.");
+findAuthorWorksCommand.AddArgument(searchArgument);
+findAuthorWorksCommand.SetHandler(FindAuthorWorks, searchArgument);
+
+var findAffiliationWorksCommand = new Command("affiliation-works", "Find works of given institution by affiliation string.");
+findAffiliationWorksCommand.AddArgument(searchArgument);
+findAffiliationWorksCommand.SetHandler(SearchWorksByAffiliations, searchArgument);
+
+var findInstitutionWorksCommand = new Command("institution-works", "Find works of given institution.");
+findInstitutionWorksCommand.AddArgument(searchArgument);
+findInstitutionWorksCommand.SetHandler(MultipleInstitutionsWork, searchArgument);
+
+var findAwardsCommand = new Command("find-awards", "Find awards for given subset of works.");
+findAwardsCommand.AddArgument(worksOption);
+findAwardsCommand.SetHandler(async (works) => { await FindAwards(works.FullName); }, worksOption);
+
+var findGrantsCommand = new Command("find-grants", "Find grants for given subset of works.");
+findGrantsCommand.AddArgument(worksOption);
+findGrantsCommand.SetHandler(async (works) => { await FindGrants(works.FullName); }, worksOption);
+
+var rootCommand = new RootCommand();
+rootCommand.AddCommand(printAuthorCommand);
+rootCommand.AddCommand(findAuthorWorksCommand);
+rootCommand.AddCommand(findAffiliationWorksCommand);
+rootCommand.AddCommand(findInstitutionWorksCommand);
+rootCommand.AddCommand(findAwardsCommand);
+rootCommand.AddCommand(findGrantsCommand);
+return await rootCommand.InvokeAsync(args);
+
 async Task FindGrants(string institutionsFile)
 {
     var works = JsonSerializer.Deserialize<List<Work>>(File.OpenRead(institutionsFile));
@@ -101,6 +136,12 @@ async Task MultipleInstitutionsWork(string institutionName)
     foreach (var institution in institutions.Results)
     {
         Console.WriteLine($"{institution.DisplayName}");
+    }
+
+    if (institutions.Results.Count == 0)
+    {
+        Console.WriteLine($"There no institutions found by name {institutionName}");
+        return;
     }
 
     var workFilter = new WorksFilter();

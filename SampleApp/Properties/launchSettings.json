@@ -1,0 +1,28 @@
+{
+  "profiles": {
+    "print-author": {
+      "commandName": "Project",
+      "commandLineArgs": "print-author \"A4328046938\""
+    },
+    "author-works": {
+      "commandName": "Project",
+      "commandLineArgs": "author-works Chomsky"
+    },
+    "affiliation-works": {
+      "commandName": "Project",
+      "commandLineArgs": "affiliation-works Sberbank"
+    },
+    "institution-works": {
+      "commandName": "Project",
+      "commandLineArgs": "institution-works Sberbank"
+    },
+    "find-awards": {
+      "commandName": "Project",
+      "commandLineArgs": "find-awards work.json"
+    },
+    "find-grants": {
+      "commandName": "Project",
+      "commandLineArgs": "find-grants work.json"
+    }
+  }
+}
