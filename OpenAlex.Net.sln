@@ -14,7 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenAlexNet.Tests", "OpenAlexNet.Tests\OpenAlexNet.Tests.csproj", "{E0CF9234-44EB-479C-9B92-1CA5FE92F469}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenAlexNet.Tests", "OpenAlexNet.Tests\OpenAlexNet.Tests.csproj", "{E0CF9234-44EB-479C-9B92-1CA5FE92F469}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RorMatcher", "RorMatcher\RorMatcher.csproj", "{FC33DC5B-E12E-4141-BE17-13F418F03156}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +36,10 @@ Global
 		{E0CF9234-44EB-479C-9B92-1CA5FE92F469}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0CF9234-44EB-479C-9B92-1CA5FE92F469}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0CF9234-44EB-479C-9B92-1CA5FE92F469}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC33DC5B-E12E-4141-BE17-13F418F03156}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC33DC5B-E12E-4141-BE17-13F418F03156}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC33DC5B-E12E-4141-BE17-13F418F03156}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC33DC5B-E12E-4141-BE17-13F418F03156}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
