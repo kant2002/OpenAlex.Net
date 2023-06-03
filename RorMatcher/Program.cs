@@ -83,7 +83,7 @@ static void FindRorCandidates(LuceneVersion AppLuceneVersion, IndexWriter writer
     var searcher = new IndexSearcher(reader);
 
     // Load unprocessed file to query Lucene index for candidates
-    var unprocesedFrame = DataFrame.LoadCsv(unprocessedFilePath, encoding: Encoding.UTF8);
+    var unprocesedFrame = DataFrame.LoadCsv(unprocessedFilePath, guessRows: 1000, encoding: Encoding.UTF8);
 
     // Append columns for ROR candidates
     var candidatesCount = 3;
@@ -116,7 +116,7 @@ static void FindRorCandidates(LuceneVersion AppLuceneVersion, IndexWriter writer
         }
     }
 
-    DataFrame.SaveCsv(unprocesedFrame, processedFilePath);
+    DataFrame.SaveCsv(unprocesedFrame, processedFilePath, encoding: Encoding.UTF8);
 }
 
 static void PopulateLuceneIndex(string rorFile, string[] searchCountries, IndexWriter writer)
