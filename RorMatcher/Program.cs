@@ -15,6 +15,8 @@ var sourceOption = new Option<string>
     ("--source", "Path to CSV file which match with ROR data.");
 var outputOption = new Option<string>
     ("--output", "Path to CSV file where to save matched data.");
+var goldOption = new Option<string>
+    ("--gold", "Gold CSV with matched ROR data.");
 var updateIndexOption = new Option<bool>
     ("--update-index", "Update Lucene index if needed.");
 var searchColumnOption = new Option<string>
@@ -26,13 +28,14 @@ var rootCommand = new RootCommand();
 rootCommand.AddOption(rorOption);
 rootCommand.AddOption(sourceOption);
 rootCommand.AddOption(outputOption);
+rootCommand.AddOption(goldOption);
 rootCommand.AddOption(searchColumnOption);
 rootCommand.AddOption(updateIndexOption);
 rootCommand.AddOption(separatorOption);
-rootCommand.SetHandler(MatchRor, rorOption, sourceOption, outputOption, searchColumnOption, separatorOption, updateIndexOption);
+rootCommand.SetHandler(MatchRor, rorOption, sourceOption, outputOption, goldOption, searchColumnOption, separatorOption, updateIndexOption);
 return await rootCommand.InvokeAsync(args);
 
-static void MatchRor(string rorDataDumpFile, string unprocessedFilePath, string processedFilePath, string searchColumnName, string searchCountries, bool updateIndex)
+static void MatchRor(string rorDataDumpFile, string unprocessedFilePath, string processedFilePath, string goldFilePath, string searchColumnName, string searchCountries, bool updateIndex)
 {
     if (!File.Exists(rorDataDumpFile))
     {
@@ -56,7 +59,13 @@ static void MatchRor(string rorDataDumpFile, string unprocessedFilePath, string 
         PopulateLuceneIndex(rorDataDumpFile, searchCountries.Split(','), writer);
     }
 
-    FindRorCandidates(AppLuceneVersion, writer, unprocessedFilePath, processedFilePath, searchColumnName);
+    DataFrame? goldData = null;
+    if (File.Exists(goldFilePath))
+    {
+        goldData = DataFrame.LoadCsv(goldFilePath);
+    }
+
+    FindRorCandidates(AppLuceneVersion, writer, unprocessedFilePath, processedFilePath, searchColumnName, goldData);
     Console.WriteLine("Done.");
 }
 
@@ -76,7 +85,7 @@ static IndexWriter OpenLuceneIndex(LuceneVersion AppLuceneVersion)
     return new IndexWriter(dir, indexConfig);
 }
 
-static void FindRorCandidates(LuceneVersion AppLuceneVersion, IndexWriter writer, string unprocessedFilePath, string processedFilePath, string searchColumnName)
+static void FindRorCandidates(LuceneVersion AppLuceneVersion, IndexWriter writer, string unprocessedFilePath, string processedFilePath, string searchColumnName, DataFrame? goldData)
 {
     Console.WriteLine("Find ROR candidates by searching Lucene.");
     using var reader = writer.GetReader(applyAllDeletes: true);
@@ -93,6 +102,9 @@ static void FindRorCandidates(LuceneVersion AppLuceneVersion, IndexWriter writer
         unprocesedFrame.Columns.Insert(3 + 3 * (i - 1), DataFrameColumn.Create($"ror{i}", new string[unprocesedFrame.Rows.Count]));
         unprocesedFrame.Columns.Insert(4 + 3 * (i - 1), DataFrameColumn.Create($"score{i}", new float?[unprocesedFrame.Rows.Count]));
     }
+
+    unprocesedFrame.Columns.Insert(2, DataFrameColumn.Create($"ror_name", new string[unprocesedFrame.Rows.Count]));
+    unprocesedFrame.Columns.Insert(3, DataFrameColumn.Create($"ror", new string[unprocesedFrame.Rows.Count]));
 
     var searchColumn = unprocesedFrame[searchColumnName];
     QueryParser parser = new QueryParser(AppLuceneVersion, "name", writer.Analyzer);
@@ -113,6 +125,19 @@ static void FindRorCandidates(LuceneVersion AppLuceneVersion, IndexWriter writer
             rorColumn[i] = foundDoc.Get("id");
             var scoreColumn = unprocesedFrame[$"score{(h + 1)}"];
             scoreColumn[i] = hit.Score;
+        }
+
+        if (goldData is not null)
+        {
+            var goldSearchColumn = goldData[searchColumnName];
+            for (var j = 0; j < goldData.Rows.Count; j++)
+            {
+                if (goldSearchColumn[j].ToString()?.Trim() == organization.Trim())
+                {
+                    unprocesedFrame[$"ror_name"][i] = goldData["ror_name"][j];
+                    unprocesedFrame[$"ror"][i] = goldData["ror"][j];
+                }
+            }
         }
     }
 
