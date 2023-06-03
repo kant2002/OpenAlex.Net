@@ -42,7 +42,7 @@ static void MatchRor(string rorDataDumpFile, string unprocessedFilePath, string 
 
     if (!File.Exists(unprocessedFilePath))
     {
-        Console.WriteLine($"Please download company.csv file from https://sanctions.nazk.gov.ua/en/compare-company/?sort=company_id&order=ASC&csv=1&country=ua,es,gb,us,ca,ch,au,jp,nz&country_no=ua,es,gb,us,ca,ch,au,jp,nz&category=7 and place in current directory.");
+        Console.WriteLine($"You did not specify source file.");
         return;
     }
 
@@ -64,7 +64,7 @@ static IndexWriter OpenLuceneIndex(LuceneVersion AppLuceneVersion)
 {
     // Construct a machine-independent path for the index
     var basePath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-    var indexPath = Path.Combine(basePath, "sanctions");
+    var indexPath = Path.Combine(basePath, "ror-matcher");
 
     var dir = FSDirectory.Open(indexPath);
 
