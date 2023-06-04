@@ -31,3 +31,15 @@ static void PrintAuthor(Author author)
     Console.WriteLine($"{author.Id} - {author.DisplayName} - ORCID: {author.Orcid} Last worket at: {author.LastKnownInstitution?.DisplayName} Works: {author.WorksCount}");
 }
 ```
+
+# Supported entities
+
+| Entity | Status |
+| ------ | ------ |
+| Works | :white_check_mark: |
+| Authors | :white_check_mark: |
+| Sources | :white_large_square: |
+| Institutions | :white_check_mark: |
+| Concepts | :white_large_square: |
+| Publishers | :white_large_square: |
+| Funders | :white_check_mark: |
