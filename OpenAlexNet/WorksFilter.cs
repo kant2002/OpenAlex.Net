@@ -142,6 +142,168 @@ public class WorksFilter
         return FilterBy("corresponding_institution_ids", value);
     }
 
+    public FilterClass ByDoi(string value)
+    {
+        return FilterBy("doi", value);
+    }
+
+    public FilterClass ByAwardId(string value)
+    {
+        return FilterBy("grants.award_id", value);
+    }
+
+    public FilterClass ByFunder(string value)
+    {
+        return FilterBy("grants.funder", value);
+    }
+
+    public FilterClass ByPmcId(string value)
+    {
+        return FilterBy("ids.pmcid", value);
+    }
+
+    public FilterClass ByPmId(string value)
+    {
+        return FilterBy("ids.pmid", value);
+    }
+
+    public FilterClass ByOpenAlex(string value)
+    {
+        return FilterBy("ids.openalex", value);
+    }
+
+    public FilterClass ByMag(string value)
+    {
+        return FilterBy("ids.mag", value);
+    }
+
+    public FilterClass IsParaText(bool value)
+    {
+        return FilterBy("is_paratext", value);
+    }
+
+    public FilterClass IsRetracted(bool value)
+    {
+        return FilterBy("is_retracted", value);
+    }
+
+    public FilterClass ByLanguage(string value)
+    {
+        return FilterBy("language", value);
+    }
+
+    public FilterClass ByLocationsIsOpenAccess(bool value)
+    {
+        return FilterBy("locations.is_oa", value);
+    }
+
+    public FilterClass ByLocationsLicense(string value)
+    {
+        return FilterBy("locations.license", value);
+    }
+
+    public FilterClass ByLocationsSourceId(string value)
+    {
+        return FilterBy("locations.source.id", value);
+    }
+
+    public FilterClass ByLocationsSourceIssn(string value)
+    {
+        return FilterBy("locations.source.issn", value);
+    }
+
+    public FilterClass ByLocationsSourceHostOrganization(string value)
+    {
+        return FilterBy("locations.source.host_organization", value);
+    }
+
+    public FilterClass ByLocationsSourceType(string value)
+    {
+        return FilterBy("locations.source.type", value);
+    }
+
+    public FilterClass ByLocationsVersion(string value)
+    {
+        return FilterBy("locations.version", value);
+    }
+
+    public FilterClass ByOpenAccessAnyRepositoryHasFullText(bool value)
+    {
+        return FilterBy("open_access.any_repository_has_fulltext", value);
+    }
+
+    public FilterClass IsOpenAccess(bool value)
+    {
+        return FilterBy("open_access.is_oa", value);
+    }
+
+    public FilterClass ByOpenAccessStatus(string value)
+    {
+        return FilterBy("open_access.oa_status", value);
+    }
+
+    public FilterClass ByPrimaryLocationIsOpenAccess(bool value)
+    {
+        return FilterBy("primary_location.is_oa", value);
+    }
+
+    public FilterClass ByPrimaryLocationLicense(string value)
+    {
+        return FilterBy("primary_location.license", value);
+    }
+
+    public FilterClass ByPrimaryLocationSourceId(string value)
+    {
+        return FilterBy("primary_location.source.id", value);
+    }
+
+    public FilterClass ByPrimaryLocationSourceIssn(string value)
+    {
+        return FilterBy("primary_location.source.issn", value);
+    }
+
+    public FilterClass ByPrimaryLocationSourceHostOrganization(string value)
+    {
+        return FilterBy("primary_location.source.host_organization", value);
+    }
+
+    public FilterClass ByPrimaryLocationSourceType(string value)
+    {
+        return FilterBy("primary_location.source.type", value);
+    }
+
+    public FilterClass ByPrimaryLocationVersion(string value)
+    {
+        return FilterBy("primary_location.version", value);
+    }
+
+    public FilterClass ByPublicationYear(int count)
+    {
+        return ByPublicationYear(FilterOperator.Equals, count);
+    }
+
+    public FilterClass ByPublicationYear(FilterOperator filterOperator, int value)
+    {
+        return FilterBy("publication_year", filterOperator, value);
+    }
+
+    public FilterClass ByPublicationDate(string value)
+    {
+        return FilterBy("publication_date", value);
+    }
+
+#if NET6_0_OR_GREATER
+    public FilterClass ByPublicationDate(DateOnly value)
+    {
+        return FilterBy("publication_date", value);
+    }
+#endif
+
+    public FilterClass ByType(string value)
+    {
+        return FilterBy("type", value);
+    }
+
     public FilterClass SearchAbstract(string value)
     {
         return FilterBy("abstract.search", value);
