@@ -113,7 +113,7 @@ static void FindRorCandidates(LuceneVersion AppLuceneVersion, IndexWriter writer
         var organization = searchColumn[i].ToString();
         if (organization is null) continue;
 
-        Query query = parser.Parse(organization.Replace("?", "").Replace("\"", "").Replace("(", "").Replace(")", ""));
+        Query query = parser.Parse(organization.Replace("?", "").Replace("\"", "").Replace("(", "").Replace(")", "").Replace("\\", "").Replace("/", ""));
         var hits = searcher.Search(query, candidatesCount).ScoreDocs;
         for (var h = 0; h < hits.Length; h++)
         {
