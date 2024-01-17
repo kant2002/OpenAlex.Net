@@ -132,10 +132,18 @@ static void FindRorCandidates(LuceneVersion AppLuceneVersion, IndexWriter writer
             var goldSearchColumn = goldData[searchColumnName];
             for (var j = 0; j < goldData.Rows.Count; j++)
             {
-                if (goldSearchColumn[j].ToString()?.Trim() == organization.Trim())
+                var matchingValue = goldSearchColumn[j].ToString();
+                if (matchingValue is null) continue;
+                var isMatched = matchingValue.Trim() == organization.Trim()
+                    || organization.Trim().IndexOf(matchingValue.Trim()) != -1
+                    || matchingValue.Trim().IndexOf(organization.Trim()) != -1;
+                if (isMatched)
                 {
-                    unprocesedFrame[$"ror_name"][i] = goldData["ror_name"][j];
-                    unprocesedFrame[$"ror"][i] = goldData["ror"][j];
+                    var ror_name = goldData["ror_name"][j];
+                    var ror = goldData["ror"][j];
+                    unprocesedFrame[$"ror_name"][i] = ror_name;
+                    unprocesedFrame[$"ror"][i] = ror;
+                    break;
                 }
             }
         }
